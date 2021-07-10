@@ -23,18 +23,16 @@ import java.util.Scanner;
 public class sockets_Cliente {
     public static void main(String[] args) throws ClassNotFoundException{
         try{
-            Socket cliente = new Socket("127.0.0.1",12345);
+            Socket cliente = new Socket("127.0.0.1",9000);
             System.out.println("Conexao feita");
             
             Scanner leDoSocketServidor = new Scanner(cliente.getInputStream());
             PrintStream envia = new PrintStream (cliente.getOutputStream());
             Scanner t = new Scanner(System.in);
-            System.out.print("ESCREVA: ");
             while(t.hasNextLine()){
                 envia.println(t.nextLine());
                 System.out.println("\nRESPOSTA: "+leDoSocketServidor.nextLine());
                 System.out.print("ESCREVA: ");
-                
             }
         }catch(UnknownHostException e){
             e.printStackTrace();

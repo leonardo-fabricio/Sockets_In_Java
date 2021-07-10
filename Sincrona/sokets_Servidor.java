@@ -22,14 +22,14 @@ import java.util.Scanner;
  * @author leonn
  */
 public class sokets_Servidor {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 	try{
             System.out.println("iniciando o servidor...");
-            ServerSocket servidor = new ServerSocket(12345);
+            ServerSocket servidor = new ServerSocket(9000);
             System.out.println("O servidor passa a aguardar conexoes...");
             Socket o_cliente = servidor.accept();
             System.out.println("Cliente "+o_cliente.getInetAddress().getHostAddress()+" conectado!");
-            //Thread.sleep(2000);
+//            
             
             PrintStream devolve = new PrintStream (o_cliente.getOutputStream());
             Scanner leDoSocketCliente = new Scanner(o_cliente.getInputStream());
@@ -38,6 +38,7 @@ public class sokets_Servidor {
                     System.out.print("ESCREVA: ");
                     Scanner t = new Scanner(System.in);
                     devolve.println(t.nextLine());
+//                    Thread.sleep(2000);
             }
             leDoSocketCliente.close();
             leDoSocketCliente = null;
@@ -49,7 +50,7 @@ public class sokets_Servidor {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
         }
-	}
+    }
 }
 //public static void main(String[] args) throws IOException {
 //        try{
