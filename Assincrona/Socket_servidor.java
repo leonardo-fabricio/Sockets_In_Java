@@ -29,37 +29,39 @@ public class Socket_servidor extends Thread{
     private static ArrayList<BufferedWriter>clientes;
     private static ServerSocket server;
     private String nome;
-    private Socket con;
-    private InputStream in;
-    private InputStreamReader inr;
-    private BufferedReader bfr;
+    private Socket cliente;
+    private InputStream recebe;
+    private InputStreamReader leitura;
+    private BufferedReader bufer;
 
     public Socket_servidor(Socket con){
-        this.con = con;
+        this.cliente = con; //Cria cliente
         try {
-            in  = con.getInputStream();
-            inr = new InputStreamReader(in);
-            bfr = new BufferedReader(inr);
+            recebe  = con.getInputStream(); //recebe dados do cliente
+            leitura = new InputStreamReader(recebe); //recebe os bytes e transforma em caracteres
+            bufer = new BufferedReader(leitura); // Salva tudo no bufer
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void run(){
+        //Sempre que um novo cliente se conecta esse metodo eh acionado
+        // Vai rodar infinitamente ate q o usuario se desconecte
 
         try{
 
             String msg;
-            OutputStream ou =  this.con.getOutputStream();
-            Writer ouw = new OutputStreamWriter(ou);
-            BufferedWriter bfw = new BufferedWriter(ouw);
-            clientes.add(bfw);
-            nome = msg = bfr.readLine();
+            OutputStream envia =  this.cliente.getOutputStream();
+            Writer escreve = new OutputStreamWriter(envia);
+            BufferedWriter escrevebufer = new BufferedWriter(escreve);
+            clientes.add(escrevebufer);
+            nome = msg = bufer.readLine();
 
             while(!"Sair".equalsIgnoreCase(msg) && msg != null)
             {
-                msg = bfr.readLine();
-                sendToAll(bfw, msg);
+                msg = bufer.readLine();
+                sendToAll(escrevebufer, msg);
                 System.out.println(msg);
             }
 
