@@ -34,15 +34,19 @@ public class Socket_servidor extends Thread{
     private InputStreamReader leitura;
     private BufferedReader bufer;
 
-    public Socket_servidor(Socket con){
-        this.cliente = con; //Cria cliente
-        try {
-            recebe  = con.getInputStream(); //recebe dados do cliente
-            leitura = new InputStreamReader(recebe); //recebe os bytes e transforma em caracteres
-            bufer = new BufferedReader(leitura); // Salva tudo no bufer
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public Socket_servidor(String s) throws IOException{
+        ServerSocket server = new ServerSocket(Integer.parseInt(s));
+        System.out.println("Aguardando conexão...");
+        Socket con = server.accept();
+        System.out.println("conexão Feita...");
+//        this.cliente = con; //Cria cliente
+//        try {
+//            recebe  = con.getInputStream(); //recebe dados do cliente
+//            leitura = new InputStreamReader(recebe); //recebe os bytes e transforma em caracteres
+//            bufer = new BufferedReader(leitura); // Salva tudo no bufer
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void run(){
@@ -55,7 +59,7 @@ public class Socket_servidor extends Thread{
             OutputStream envia =  this.cliente.getOutputStream();
             Writer escreve = new OutputStreamWriter(envia);
             BufferedWriter escrevebufer = new BufferedWriter(escreve);
-            clientes.add(escrevebufer);
+
             nome = msg = bufer.readLine();
 
             while(!"Sair".equalsIgnoreCase(msg) && msg != null)
@@ -85,29 +89,6 @@ public class Socket_servidor extends Thread{
     }
     public static void main(String []args) {
 
-        try{
-            //Cria os objetos necessário para instânciar o servidor
-            JLabel lblMessage = new JLabel("Porta do Servidor:");
-            JTextField txtPorta = new JTextField("12345");
-            Object[] texts = {lblMessage, txtPorta };
-            JOptionPane.showMessageDialog(null, texts);
-            server = new ServerSocket(Integer.parseInt(txtPorta.getText()));
-            clientes = new ArrayList<BufferedWriter>();
-            JOptionPane.showMessageDialog(null,"Servidor ativo na porta: "+
-                    txtPorta.getText());
-
-            while(true){
-                System.out.println("Aguardando conexão...");
-                Socket con = server.accept();
-                System.out.println("Cliente conectado...");
-                Thread t = new Socket_servidor(con);
-                t.start();
-            }
-
-        }catch (Exception e) {
-
-            e.printStackTrace();
-        }
     }// Fim do método main
 } //Fim da classe
 

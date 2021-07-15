@@ -5,21 +5,33 @@
  */
 package Assincrona;
 
+import javax.swing.*;
+import java.awt.event.MouseEvent;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+
+import static java.lang.Thread.*;
+
 /**
  *
- * @author leonn
+ * @author leo, Luis
  */
 public class SocketesThreads_Con extends javax.swing.JFrame {
-
     /**
      * Creates new form SocketesThreads_Con
      */
     public SocketesThreads_Con() {
         initComponents();
         this.setResizable(false);
-        this.setLocationRelativeTo(null);
+        setLocationRelativeTo(null);
     }
-
+    String aux1 = ""; 
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -38,6 +50,7 @@ public class SocketesThreads_Con extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
+        label = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -99,8 +112,11 @@ public class SocketesThreads_Con extends javax.swing.JFrame {
                             .addComponent(jButton1))
                         .addGap(39, 39, 39))))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(84, 84, 84)
-                .addComponent(jRadioButton1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addComponent(jRadioButton1))
+                    .addComponent(label, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jRadioButton2)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -108,7 +124,8 @@ public class SocketesThreads_Con extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
+                .addComponent(label, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1, 1, 1)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jRadioButton1)
                     .addComponent(jRadioButton2))
@@ -151,21 +168,49 @@ public class SocketesThreads_Con extends javax.swing.JFrame {
     }//GEN-LAST:event_jRadioButton1ActionPerformed
         
     //BOTAO DA CONEXAO
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1MouseClicked
+    private void jButton1MouseClicked (java.awt.event.MouseEvent evt){//GEN-FIRST:event_jButton1MouseClicked
+            // TODO add your handling code here:
+            try {
+                if (aux1.equals("server")) {
+                    this.label.setText(aux1);
+                    Socket_servidor server = new Socket_servidor(jTextField2.getText());
+                    chamamsg(aux1);
+                    this.dispose();
+                } else {
+                    Socket_cliente cliente = new Socket_cliente(jTextField1.getText(), jTextField2.getText());
+                    chamamsg(aux1);
+                    this.dispose();
+//                    OutputStream ou = cliente.getOutputStream();
+//                    OutputStreamWriter ouw = new OutputStreamWriter(ou);
+//                    BufferedWriter bfw = new BufferedWriter(ouw);
+//                    bfw.write("Cliente " + "\r\n");
+//                    bfw.flush();
+//                    chamamsg();
+//                    this.dispose();
+                }
+            }catch (IOException ex){
+                System.out.println(ex.getMessage());
+            }
+    }
+//GEN-LAST:event_jButton1MouseClicked
+
 
     //DESABILITAR CAMPO IP
     private void jRadioButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButton1MouseClicked
         // TODO add your handling code here:
         this.jTextField1.setEnabled(false);
+        this.aux1 = "server";
     }//GEN-LAST:event_jRadioButton1MouseClicked
 
     private void jRadioButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButton2MouseClicked
         // TODO add your handling code here:
         this.jTextField1.setEnabled(true);
+        this.aux1 = "cliente";
     }//GEN-LAST:event_jRadioButton2MouseClicked
-
+    public void chamamsg(String nome){
+        SocketsThreads_mesg msg = new SocketsThreads_mesg(nome);
+        msg.setVisible(true);
+    }
     /**
      * @param args the command line arguments
      */
@@ -200,7 +245,12 @@ public class SocketesThreads_Con extends javax.swing.JFrame {
             }
         });
     }
-
+    public String getjTextField1(){
+        return jTextField1.getText();
+    }
+    public String getjTextField2(){
+        return jTextField2.getText();
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
@@ -211,5 +261,6 @@ public class SocketesThreads_Con extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JLabel label;
     // End of variables declaration//GEN-END:variables
 }
