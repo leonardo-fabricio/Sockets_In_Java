@@ -1,17 +1,39 @@
 package Assincrona;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
 import java.net.*;
 
 public class Saida extends Thread{
-    public void run(Socket cliente, String txt){
+    private Socket cliente = null;
+    private String txt = "";
+    private String nome = "";
+    public Saida(Socket c,String s){
+        this.cliente = c;
+        this.txt = s;
+        this.nome = nome;
+        new Thread(this).start();
+    }
+    public void run(){
         try {
-            PrintStream envia = new PrintStream(cliente.getOutputStream());
+            OutputStream ou = cliente.getOutputStream();
+            OutputStreamWriter ouw = new OutputStreamWriter(ou);
+            BufferedWriter bfw = new BufferedWriter(ouw);
+
             while (true){
-                envia.println(txt);
+                bfw.write("Cliente " + "\r\n");
+                bfw.flush();
             }
         }catch (IOException ex){
             System.out.println(ex.getMessage());
         }
+        catch (NullPointerException ex){
+            System.out.println(ex.getMessage());
+        }
     }
 }
+//                    OutputStream ou = cliente.getOutputStream();
+//                    OutputStreamWriter ouw = new OutputStreamWriter(ou);
+//                    BufferedWriter bfw = new BufferedWriter(ouw);
+//                    bfw.write("Cliente " + "\r\n");
+//                    bfw.flush();
+//                    chamamsg();
+//                    this.dispose();

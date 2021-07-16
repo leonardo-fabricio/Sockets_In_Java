@@ -19,12 +19,24 @@ import java.net.Socket;
  */
 
 public class Entrada extends Thread{
-    public void run(Socket cliente) throws IOException {
-        BufferedReader ler = null;
-        ler = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
+    private Socket cliente = null;
+    public Entrada(Socket c){
+        this.cliente = c;
+        new Thread(this).start();
+    }
 
-        while (true){
-            System.out.println(ler.ready());
+    @Override
+    public void run() {
+        try {
+            while (true) {
+                BufferedReader ler = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
+                System.out.println(ler.readLine());
+            }
+        }catch(IOException e){
+            System.out.println(e.getMessage());
+        }
+        catch(NullPointerException e){
+            System.out.println(e.getMessage());
         }
     }
 }

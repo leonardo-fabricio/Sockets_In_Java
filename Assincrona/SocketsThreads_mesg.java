@@ -5,12 +5,15 @@
  */
 package Assincrona;
 
+import java.net.Socket;
+
 /**
  *
  * @author leonn
  */
 public class SocketsThreads_mesg extends javax.swing.JFrame {
-
+    public String aux = "";
+    public static Socket cliente = null;
     /**
      * Creates new form SocketsThreads_mesg
      */
@@ -92,8 +95,19 @@ public class SocketsThreads_mesg extends javax.swing.JFrame {
         // TODO add your handling code here:
         String aux = this.areatexto.getText();
         this.areatexto.setText(aux+this.campotexto.getText()+"\n");
+        mandaProTextArea();
+        enviar(aux);
     }//GEN-LAST:event_jButton2MouseClicked
 
+    public void mandaProTextArea(){
+        Entrada e = new Entrada(this.cliente);
+    }
+    public void enviar(String s){
+        Saida envia = new Saida(this.cliente,s);
+    }
+    public void setCliente(Socket c){
+        this.cliente = c;
+    }
     /**
      * @param args the command line arguments
      */
