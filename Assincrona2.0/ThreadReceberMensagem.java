@@ -3,16 +3,18 @@ package Sincrona;
 import java.io.IOException;
 
 public class ThreadReceberMensagem extends Base implements Runnable{
-
-    public ThreadReceberMensagem(){
+    private Tela t;
+    public ThreadReceberMensagem(Tela aux){
+        this.t = aux;
         new Thread(this).start();
     }
 
     @Override
     public void run(){
+
         try {
             while (true) {
-                System.out.println("RESPOSTA: " + ReceberMensagem(con));
+               t.RecebeDados(ReceberMensagem(con));
             }
         }catch (IOException exception){
             System.out.println(exception.getMessage());

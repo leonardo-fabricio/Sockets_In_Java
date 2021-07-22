@@ -6,24 +6,35 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.InputMismatchException;
+
 import java.util.Scanner;
 
 public class Base{
     public static Socket con;
     public static ServerSocket server;
+    public static String str;
+
+    public void setStr(String s){
+        str = s;
+    }
 
     public String ReceberMensagem(Socket con) throws IOException {
         //con.setTcpNoDelay(true);
         BufferedReader leDoSocketCliente = new BufferedReader(new InputStreamReader(con.getInputStream()));
         return leDoSocketCliente.readLine();
     }
-    public void mandarMensagem(Socket con) throws IOException{
-        PrintStream devolve = new PrintStream (con.getOutputStream());
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Digite algo: ");
-        devolve.println(scan.nextLine());
-        devolve.flush();
+    public void mandarMensagem(Socket con) throws IOException {
+        try{
+            PrintStream devolve = new PrintStream(con.getOutputStream());
+            if (!(str.equals(""))) {
+                devolve.println(str);
+                devolve.flush();
+                str = "";
+            }
+        }catch(NullPointerException e){
+            //System.out.println(e.getMessage());
+        }
+
     }
 
 }
